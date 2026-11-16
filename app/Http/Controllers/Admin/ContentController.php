@@ -7,6 +7,8 @@ use App\Models\ContentItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ContentController extends Controller
@@ -78,7 +80,7 @@ class ContentController extends Controller
 
     private function validated(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'title' => ['required', 'string', 'max:180'],
             'type' => ['required', 'in:article,event,gallery,learning'],
             'excerpt' => ['nullable', 'string', 'max:500'],
@@ -100,29 +102,36 @@ class ContentController extends Controller
             'scenario.summary' => ['required_if:type,learning', 'nullable', 'string', 'max:1500'],
         ]);
 
-        if ($request->input('type') === 'learning' && ! collect($request->input('scenario.choices', []))->contains(fn ($choice) => ! empty($choice['is_recommended']))) {
-            throw ValidationException::withMessages([
-                'scenario.choices' => 'Tandai satu pilihan sebagai tindakan yang direkomendasikan.',
-            ]);
+        if ($data['type'] === 'learning') {
+            $recommendedCount = collect($data['scenario']['choices'] ?? [])
+                ->filter(fn ($choice) => ! empty($choice['is_recommended']))
+                ->count();
+
+            if ($recommendedCount !== 1) {
+                throw ValidationException::withMessages([
+                    'scenario.choices' => 'Tandai tepat satu pilihan sebagai tindakan yang direkomendasikan.',
+                ]);
+            }
         }
 
-        return $validated;
+        return $data;
     }
 
     private function normalizeScenario(array $scenario): array
     {
         $choices = collect($scenario['choices'] ?? [])
-            ->filter(fn ($choice) => filled($choice['label'] ?? null))
             ->map(fn ($choice) => [
                 'label' => trim($choice['label']),
-                'feedback' => trim($choice['feedback'] ?? ''),
+                'feedback' => trim($choice['feedback']),
                 'is_recommended' => filter_var($choice['is_recommended'] ?? false, FILTER_VALIDATE_BOOLEAN),
             ])->values()->all();
 
         return [
             'intro' => trim($scenario['intro'] ?? ''),
             'situation' => trim($scenario['situation'] ?? ''),
-            'supporting_info' => collect($scenario['supporting_info'] ?? [])->filter(fn ($item) => filled($item))->map(fn ($item) => trim($item))->values()->all(),
+            'supporting_info' => collect($scenario['supporting_info'] ?? [])
+                ->filter(fn ($item) => filled($item))
+                ->map(fn ($item) => trim($item))->values()->all(),
             'question' => trim($scenario['question'] ?? ''),
             'choices' => $choices,
             'summary' => trim($scenario['summary'] ?? ''),
