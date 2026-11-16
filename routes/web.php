@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\\Support\\Facades\\Route;
+use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.home')->name('home');
 Route::view('/edukasi', 'pages.education')->name('education');
@@ -9,7 +9,5 @@ Route::view('/galeri', 'pages.gallery')->name('gallery');
 Route::view('/pembelajaran', 'pages.learning')->name('learning');
 Route::view('/tentang', 'pages.about')->name('about');
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::view('/login', 'admin.login')->name('login');
-    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-});
+// Login admin dan dashboard akan diaktifkan setelah autentikasi backend dipasang.
+Route::view('/admin/login', 'admin.login')->name('admin.login');
