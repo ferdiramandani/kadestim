@@ -54,12 +54,12 @@
     <div class="home-discover-grid">
         <div class="home-discover-column"><div class="home-mini-heading"><h3>Event Duta</h3><a class="text-link" href="{{ route('events') }}">Semua event ↗</a></div>
             @forelse($latestEvents as $item)
-            <a class="home-list-item" href="{{ route('content.show', ['type' => 'event', 'slug' => $item->slug])"><span class="home-list-date">{{ $item->published_at?->format('d M') }}</span><span><strong>{{ $item->title }}</strong><small>{{ $item->event_location ?: 'Informasi kegiatan Duta Kesehatan' }}</small></span><b>↗</b></a>
+            <a class="home-list-item" href="{{ route('content.show', ['type' => 'event', 'slug' => $item->slug]) }}"><span class="home-list-date">{{ $item->published_at?->format('d M') }}</span><span><strong>{{ $item->title }}</strong><small>{{ $item->event_location ?: 'Informasi kegiatan Duta Kesehatan' }}</small></span><b>↗</b></a>
             @empty<p class="home-muted">Informasi event akan ditampilkan di sini setelah dipublikasikan.</p>@endforelse
         </div>
         <div class="home-discover-column"><div class="home-mini-heading"><h3>Media Pembelajaran</h3><a class="text-link" href="{{ route('learning') }}">Semua modul ↗</a></div>
             @forelse($latestLearning as $item)
-            <a class="home-list-item" href="{{ route('content.show', ['type' => 'learning', 'slug' => $item->slug])"><span class="home-list-icon">◎</span><span><strong>{{ $item->title }}</strong><small>{{ $item->excerpt }}</small></span><b>↗</b></a>
+            <a class="home-list-item" href="{{ route('content.show', ['type' => 'learning', 'slug' => $item->slug]) }}"><span class="home-list-icon">◎</span><span><strong>{{ $item->title }}</strong><small>{{ $item->excerpt }}</small></span><b>↗</b></a>
             @empty<p class="home-muted">Modul jelajah kasus akan tersedia setelah diterbitkan.</p>@endforelse
         </div>
     </div>
