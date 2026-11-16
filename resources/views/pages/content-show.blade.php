@@ -5,6 +5,16 @@
 <article class="article-body">
 @if($item->cover_image)<img class="article-cover" src="{{ str_starts_with($item->cover_image, 'http') ? $item->cover_image : asset('storage/'.$item->cover_image) }}" alt="{{ $item->title }}">@endif
 <div class="article-meta">Dipublikasikan {{ $item->published_at?->format('d F Y') }}</div>
+@if($type === 'article' && ($item->content_format ?? 'text') === 'video' && $item->external_url)
+@php
+    $videoHost = parse_url($item->external_url, PHP_URL_HOST);
+    $videoPath = parse_url($item->external_url, PHP_URL_PATH) ?? '';
+    $youtubeId = null;
+    if (in_array($videoHost, ['www.youtube.com','youtube.com','m.youtube.com'], true)) { parse_str(parse_url($item->external_url, PHP_URL_QUERY) ?? '', $videoQuery); $youtubeId = $videoQuery['v'] ?? null; }
+    if ($videoHost === 'youtu.be') { $youtubeId = trim($videoPath, '/'); }
+@endphp
+@if($youtubeId && preg_match('/^[A-Za-z0-9_-]{11}$/', $youtubeId))<div class="video-embed"><iframe src="https://www.youtube-nocookie.com/embed/{{ $youtubeId }}" title="{{ $item->title }}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>@else<p><a class="button button-primary" href="{{ $item->external_url }}" target="_blank" rel="noopener noreferrer">Tonton video ↗</a></p>@endif
+@endif
 @if($type === 'learning' && $item->scenario_data)
 <div class="learning-tags"><span>{{ ['children'=>'Anak-anak','teens'=>'Remaja','adults'=>'Dewasa / keluarga','all'=>'Semua usia'][$item->scenario_data['audience'] ?? 'all'] }}</span><span>{{ $item->scenario_data['topic'] ?? 'Pembelajaran kesehatan' }}</span></div>
 @endif
@@ -58,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 @endif
-<div class="article-text">{!! nl2br(e($item->body)) !!}</div>
+@if($item->body)<div class="article-text">{!! nl2br(e($item->body)) !!}</div>@endif
 @if($item->external_url)<p><a class="button button-primary" href="{{ $item->external_url }}" target="_blank" rel="noopener noreferrer">Informasi selengkapnya ↗</a></p>@endif
 <a class="text-link" href="{{ route('home') }}">← Kembali ke beranda</a>
 </article>
