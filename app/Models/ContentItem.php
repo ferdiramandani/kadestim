@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ContentItem extends Model
 {
     protected $fillable = [
-        'title', 'slug', 'type', 'excerpt', 'body', 'cover_image',
+        'title', 'slug', 'type', 'content_format', 'excerpt', 'body', 'cover_image',
         'status', 'event_start_at', 'event_location', 'external_url',
         'scenario_data', 'author_id', 'published_at',
     ];
