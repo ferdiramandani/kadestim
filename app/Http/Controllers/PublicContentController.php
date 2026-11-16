@@ -7,11 +7,16 @@ use Illuminate\View\View;
 
 class PublicContentController extends Controller
 {
-    public function index(string $type): View
+    public function index(\\Illuminate\\Http\\Request $request, string $type): View
     {
         abort_unless(in_array($type, ['article', 'event', 'gallery', 'learning'], true), 404);
 
-        $items = ContentItem::published()->where('type', $type)->latest('published_at')->paginate(9);
+        $query = ContentItem::published()->where('type', $type);
+        if ($type === 'learning') {
+            $query->when($request->filled('audience'), fn ($q) => $q->where('scenario_data->audience', $request->input('audience')))
+                ->when($request->filled('topic'), fn ($q) => $q->where('scenario_data->topic', $request->input('topic')));
+        }
+        $items = $query->latest('published_at')->paginate(9)->withQueryString();
 
         return view('pages.content-index', compact('items', 'type'));
     }
