@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PublicContentController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'pages.home')->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/edukasi', [PublicContentController::class, 'index'])->defaults('type', 'article')->name('education');
 Route::get('/event', [PublicContentController::class, 'index'])->defaults('type', 'event')->name('events');
 Route::get('/galeri', [PublicContentController::class, 'index'])->defaults('type', 'gallery')->name('gallery');
