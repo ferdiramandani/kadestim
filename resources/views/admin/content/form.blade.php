@@ -14,7 +14,8 @@
 <label>Judul konten<input name="title" value="{{ old('title',$item->title) }}" maxlength="180" required></label>
 <div class="form-two"><label>Kategori<select name="type" id="content-type" required>@foreach(['article'=>'Edukasi Kesehatan','event'=>'Event Duta','gallery'=>'Galeri','learning'=>'Media Pembelajaran'] as $key=>$label)<option value="{{ $key }}" @selected(old('type',$item->type)===$key)>{{ $label }}</option>@endforeach</select></label>
 <label>Status<select name="status" required>@foreach(['draft'=>'Draft','review'=>'Review','published'=>'Published','archived'=>'Archived'] as $key=>$label)<option value="{{ $key }}" @selected(old('status',$item->status ?: 'draft')===$key)>{{ $label }}</option>@endforeach</select></label></div>
-<label>Ringkasan<textarea name="excerpt" rows="3" maxlength="500">{{ old('excerpt',$item->excerpt) }}</textarea></label>
+<label>Ringkasan<textarea name="excerpt" rows="3" maxlength="500">{{ old('excerpt',$item->excerpt) }}</textarea><small>Ringkasan singkat untuk kartu konten. Detail lengkap ditampilkan setelah pengunjung memilih Selengkapnya.</small></label>
+<div id="article-format-field"><label>Format edukasi<select name="content_format"><option value="text" @selected(old('content_format',$item->content_format ?? 'text') === 'text')>Edukasi teks / artikel</option><option value="video" @selected(old('content_format',$item->content_format ?? 'text') === 'video')>Edukasi video</option></select></label><small>Untuk edukasi video, masukkan tautan video pada kolom link informasi di bawah.</small></div>
 <label>Isi konten<textarea name="body" rows="8">{{ old('body',$item->body) }}</textarea></label>
 <label>URL gambar sampul (opsional)<input type="url" name="cover_image" value="{{ old('cover_image',$item->cover_image && !str_starts_with($item->cover_image, 'http') ? '' : $item->cover_image) }}" placeholder="https://..."></label>
 <label>Atau unggah gambar dari perangkat (JPG, PNG, WEBP · maks. 4 MB)<input type="file" name="cover_image_file" accept="image/jpeg,image/png,image/webp">@if($item->cover_image && !str_starts_with($item->cover_image, 'http'))<small>Gambar tersimpan: {{ $item->cover_image }}</small>@endif</label>
@@ -54,9 +55,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const type = document.getElementById('content-type');
     const scenarioEditor = document.getElementById('scenario-editor');
+    const articleFormat = document.getElementById('article-format-field');
     const form = document.getElementById('content-editor');
     const modal = document.getElementById('scenario-preview-modal');
-    const syncType = () => { scenarioEditor.hidden = type.value !== 'learning'; };
+    const syncType = () => { scenarioEditor.hidden = type.value !== 'learning'; articleFormat.hidden = type.value !== 'article'; };
     type.addEventListener('change', syncType); syncType();
 
     const supportList = document.getElementById('supporting-list');
