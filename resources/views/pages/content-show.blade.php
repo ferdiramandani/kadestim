@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 @endif
 @if($item->body)<div class="article-text">{!! nl2br(e($item->body)) !!}</div>@endif
-@if($item->external_url)<p><a class="button button-primary" href="{{ $item->external_url }}" target="_blank" rel="noopener noreferrer">Informasi selengkapnya ↗</a></p>@endif
+@if($item->external_url && !($type === 'article' && ($item->content_format ?? 'text') === 'video'))<p><a class="button button-primary" href="{{ $item->external_url }}" target="_blank" rel="noopener noreferrer">{{ $type === 'event' ? 'Informasi / pendaftaran event ↗' : 'Informasi selengkapnya ↗' }}</a></p>@endif
 <a class="text-link" href="{{ route('home') }}">← Kembali ke beranda</a>
 </article>
 @endsection
