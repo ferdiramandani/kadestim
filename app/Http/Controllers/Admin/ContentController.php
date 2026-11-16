@@ -37,6 +37,7 @@ class ContentController extends Controller
         $scenario = $data['scenario'] ?? [];
         unset($data['scenario']);
 
+        $data['content_format'] = $data['type'] === 'article' ? ($data['content_format'] ?? 'text') : null;
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['author_id'] = $request->user()->id;
         $data['scenario_data'] = $data['type'] === 'learning' ? $this->normalizeScenario($scenario) : null;
@@ -66,6 +67,7 @@ class ContentController extends Controller
         $scenario = $data['scenario'] ?? [];
         unset($data['scenario']);
 
+        $data['content_format'] = $data['type'] === 'article' ? ($data['content_format'] ?? 'text') : null;
         $data['slug'] = $this->uniqueSlug($data['title'], $content->id);
         $data['scenario_data'] = $data['type'] === 'learning' ? $this->normalizeScenario($scenario) : null;
 
@@ -106,6 +108,7 @@ class ContentController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'max:180'],
             'type' => ['required', 'in:article,event,gallery,learning'],
+            'content_format' => ['nullable', 'in:text,video'],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'body' => ['nullable', 'string'],
             'cover_image' => ['nullable', 'url', 'max:2048'],
