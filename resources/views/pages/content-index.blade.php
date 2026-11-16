@@ -8,7 +8,7 @@
 <section class="section"><div class="public-content-grid">
 @forelse($items as $item)
 <a class="public-content-card" href="{{ route('content.show',[$type,$item->slug]) }}">
-@if($item->cover_image)<img src="{{ $item->cover_image }}" alt="" loading="lazy">@else<div class="content-placeholder">KADESTIM</div>@endif
+@if($item->cover_image)<img src="{{ str_starts_with($item->cover_image, 'http') ? $item->cover_image : asset('storage/'.$item->cover_image) }}" alt="" loading="lazy">@else<div class="content-placeholder">KADESTIM</div>@endif
 <div class="public-content-copy"><span class="eyebrow">{{ $item->published_at?->format('d M Y') }}</span>@if($type === 'learning' && $item->scenario_data)<div class="learning-tags"><span>{{ ['children'=>'Anak-anak','teens'=>'Remaja','adults'=>'Dewasa / keluarga','all'=>'Semua usia'][$item->scenario_data['audience'] ?? 'all'] }}</span><span>{{ $item->scenario_data['topic'] ?? 'Pembelajaran kesehatan' }}</span></div>@endif<h2>{{ $item->title }}</h2><p>{{ $item->excerpt }}</p><span class="feature-link">Baca selengkapnya ↗</span></div></a>
 @empty<div class="empty-state"><span class="empty-icon">✳</span><h2>Konten belum tersedia</h2><p>Materi untuk kategori ini akan ditampilkan setelah diterbitkan oleh pengelola.</p><a class="text-link" href="{{ route('home') }}">Kembali ke beranda ↗</a></div>@endforelse
 </div>{{ $items->links() }}</section>
