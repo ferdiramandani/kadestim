@@ -30,6 +30,8 @@ class AdminLearningContentTest extends TestCase
             'type' => 'learning',
             'status' => 'draft',
             'scenario' => [
+                'audience' => 'children',
+                'topic' => 'Kebersihan diri',
                 'intro' => 'Memahami kebiasaan bersih.',
                 'situation' => 'Seorang anak selesai bermain dan akan makan.',
                 'supporting_info' => ['Tangan dapat membawa kotoran dan kuman.'],
@@ -51,6 +53,8 @@ class AdminLearningContentTest extends TestCase
         $item = ContentItem::where('title', 'Kebiasaan Sehat Sebelum Makan')->firstOrFail();
         $this->assertSame('Mencuci tangan dengan sabun', $item->scenario_data['choices'][1]['label']);
         $this->assertTrue($item->scenario_data['choices'][1]['is_recommended']);
+        $this->assertSame('children', $item->scenario_data['audience']);
+        $this->assertSame('Kebersihan diri', $item->scenario_data['topic']);
     }
 
     public function test_learning_module_requires_exactly_one_recommended_choice(): void
@@ -60,6 +64,8 @@ class AdminLearningContentTest extends TestCase
             'type' => 'learning',
             'status' => 'draft',
             'scenario' => [
+                'audience' => 'teens',
+                'topic' => 'Kesehatan remaja',
                 'intro' => 'Pembuka',
                 'situation' => 'Situasi',
                 'supporting_info' => [],
