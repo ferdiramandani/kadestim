@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\CreateAdmin;
 use App\Http\Middleware\EnsureAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
