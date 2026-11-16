@@ -14,12 +14,10 @@
 <label>URL gambar sampul (opsional)<input type="url" name="cover_image" value="{{ old('cover_image',$item->cover_image) }}" placeholder="https://..."></label>
 <div class="form-two"><label>Tanggal dan waktu event (opsional)<input type="datetime-local" name="event_start_at" value="{{ old('event_start_at',$item->event_start_at?->format('Y-m-d\TH:i')) }}"></label><label>Lokasi event (opsional)<input name="event_location" value="{{ old('event_location',$item->event_location) }}"></label></div>
 <label>Link pendaftaran / informasi (opsional)<input type="url" name="external_url" value="{{ old('external_url',$item->external_url) }}"></label>
-@if(old('type',$item->type)==='learning' || $item->type==='learning')
 <label>Data skenario pembelajaran (JSON)
 <textarea name="scenario_data" rows="12" placeholder='{"intro":"...","situation":"...","supporting_info":["..."],"question":"...","choices":[{"label":"...","feedback":"...","is_recommended":true}],"summary":"..."}'>{{ old('scenario_data', $item->scenario_data ? json_encode($item->scenario_data, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE) : '') }}</textarea>
 <small>Isi untuk kategori Media Pembelajaran. Gunakan struktur JSON: intro, situation, supporting_info (array), question, choices (array label/feedback/is_recommended), dan summary. Materi perlu ditinjau sebelum dipublikasikan.</small>
 </label>
-@endif
 <div class="form-actions"><a class="button button-outline" href="{{ route('admin.content.index') }}">Batal</a><button class="button button-primary" type="submit">Simpan Konten</button></div>
 </form></div></section>
 @endsection
