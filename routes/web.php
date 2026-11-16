@@ -1,13 +1,24 @@
 <?php
 
+use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PublicContentController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.home')->name('home');
-Route::view('/edukasi', 'pages.education')->name('education');
-Route::view('/event', 'pages.events')->name('events');
-Route::view('/galeri', 'pages.gallery')->name('gallery');
-Route::view('/pembelajaran', 'pages.learning')->name('learning');
+Route::get('/edukasi', [PublicContentController::class, 'index'])->defaults('type', 'article')->name('education');
+Route::get('/event', [PublicContentController::class, 'index'])->defaults('type', 'event')->name('events');
+Route::get('/galeri', [PublicContentController::class, 'index'])->defaults('type', 'gallery')->name('gallery');
+Route::get('/pembelajaran', [PublicContentController::class, 'index'])->defaults('type', 'learning')->name('learning');
 Route::view('/tentang', 'pages.about')->name('about');
+Route::get('/konten/{type}/{slug}', [PublicContentController::class, 'show'])->name('content.show');
 
-// Login admin dan dashboard akan diaktifkan setelah autentikasi backend dipasang.
-Route::view('/admin/login', 'admin.login')->name('admin.login');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.submit');
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::view('/', 'admin.dashboard')->name('dashboard');
+        Route::resource('/konten', ContentController::class)->parameters(['konten' => 'content'])->names('content');
+    });
+});
