@@ -5,6 +5,9 @@
 <article class="article-body">
 @if($item->cover_image)<img class="article-cover" src="{{ $item->cover_image }}" alt="{{ $item->title }}">@endif
 <div class="article-meta">Dipublikasikan {{ $item->published_at?->format('d F Y') }}</div>
+@if($type === 'learning' && $item->scenario_data)
+<div class="learning-tags"><span>{{ ['children'=>'Anak-anak','teens'=>'Remaja','adults'=>'Dewasa / keluarga','all'=>'Semua usia'][$item->scenario_data['audience'] ?? 'all'] }}</span><span>{{ $item->scenario_data['topic'] ?? 'Pembelajaran kesehatan' }}</span></div>
+@endif
 @if($item->event_start_at)<p><strong>Waktu:</strong> {{ $item->event_start_at->format('d F Y, H:i') }} WIB</p>@endif
 @if($item->event_location)<p><strong>Lokasi:</strong> {{ $item->event_location }}</p>@endif
 @if($type === 'learning' && $item->scenario_data)
