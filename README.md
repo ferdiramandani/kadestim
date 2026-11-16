@@ -33,6 +33,7 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 - Status **Draft** dan **Review** tidak tampil untuk publik.
 - Status **Published** tampil di halaman publik.
 - Status **Archived** disimpan di area admin dan tidak tampil untuk publik.
+- Untuk tipe **Media Pembelajaran**, admin dapat mengisi data skenario dalam JSON: `intro`, `situation`, `supporting_info` (array), `question`, `choices` (array berisi `label`, `feedback`, `is_recommended`), dan `summary`. Pengunjung membaca situasi dan informasi pendukung, memilih tindakan, lalu melihat penjelasan dan rangkuman tanpa sistem skor.
 
 ## Keamanan
 - Tidak ada pendaftaran admin publik. Akun admin dibuat melalui perintah terminal.
