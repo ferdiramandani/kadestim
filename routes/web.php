@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PublicContentController;
 use Illuminate\Support\Facades\Route;
 
