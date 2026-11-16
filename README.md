@@ -25,7 +25,7 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 5. Jalankan `php artisan key:generate`.
 6. Jalankan migrasi: `php artisan migrate`.
 7. Jalankan `php artisan storage:link`.
-8. Buat akun admin melalui terminal: `php artisan kadestim:create-admin`. Isi nama, email, pilih peran `super_admin` untuk akun pengelola utama (atau peran sesuai kebutuhan), dan kata sandi minimal 12 karakter. Super Admin dapat menambah serta mengatur akun admin lain melalui dashboard.
+8. Buat akun admin melalui terminal: `php artisan kadestim:create-admin`. Isi nama, email, pilih peran `super_admin` untuk akun pengelola utama (atau peran sesuai kebutuhan), dan kata sandi minimal 12 karakter. Super Admin dapat menambah serta mengatur akun admin lain melalui dashboard. Jika akun admin lama sudah terlanjur dibuat, tingkatkan melalui terminal dengan `php artisan kadestim:promote-super-admin email@domain.com` lalu konfirmasi.
 9. Jalankan server lokal: `php artisan serve`.
 10. Buka `http://127.0.0.1:8000`; halaman admin ada di `/admin/login`.
 
