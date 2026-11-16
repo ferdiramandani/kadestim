@@ -1,5 +1,7 @@
 <?php
 
+use App\Console\Commands\PromoteSuperAdmin;
+
 use App\Console\Commands\CreateAdmin;
 use App\Http\Middleware\EnsureAdmin;
 use App\Http\Middleware\EnsureSuperAdmin;
