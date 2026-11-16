@@ -12,6 +12,7 @@
         <div><span class="eyebrow">RINGKASAN WEBSITE</span><h2>Ikhtisar konten</h2></div>
         <div class="admin-toolbar-actions">
             <a class="button button-primary" href="{{ route('admin.content.create') }}">＋ Buat Konten</a>
+            @if(auth()->user()->role === 'super_admin')<a class="button button-outline" href="{{ route('admin.users.index') }}">Kelola Admin</a>@endif
             <form method="post" action="{{ route('admin.logout') }}">@csrf<button class="button button-outline" type="submit">Keluar</button></form>
         </div>
     </div>
