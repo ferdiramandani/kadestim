@@ -56,6 +56,9 @@ class ContentController extends Controller
     {
         $data = $this->validated($request);
         $oldCover = $content->cover_image;
+        if (! $request->filled('cover_image') && ! $request->hasFile('cover_image_file')) {
+            $data['cover_image'] = $oldCover;
+        }
         $this->storeUploadedCover($request, $data);
         if ($request->hasFile('cover_image_file') && $oldCover && ! str_starts_with($oldCover, 'http')) {
             Storage::disk('public')->delete($oldCover);
