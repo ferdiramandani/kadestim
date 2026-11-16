@@ -6,6 +6,7 @@ use Tests\TestCase;
 
 class PublicPagesTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_homepage_is_available_without_login(): void
     {
         $this->get('/')->assertOk()->assertSee('KADESTIM');
