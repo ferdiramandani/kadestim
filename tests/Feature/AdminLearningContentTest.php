@@ -75,6 +75,21 @@ class AdminLearningContentTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_upload_a_cover_image_for_content(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->admin())->post(route('admin.content.store'), [
+            'title' => 'Dokumentasi Kegiatan',
+            'type' => 'gallery',
+            'status' => 'draft',
+            'cover_image_file' => UploadedFile::fake()->image('cover.jpg'),
+        ])->assertRedirect(route('admin.content.index'));
+
+        $item = ContentItem::where('title', 'Dokumentasi Kegiatan')->firstOrFail();
+        Storage::disk('public')->assertExists($item->cover_image);
+    }
+
     public function test_learning_module_requires_exactly_one_recommended_choice(): void
     {
         $this->actingAs($this->admin())->from('/admin/konten/create')->post(route('admin.content.store'), [
