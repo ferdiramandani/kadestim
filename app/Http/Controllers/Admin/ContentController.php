@@ -58,7 +58,13 @@ class ContentController extends Controller
 
     public function update(Request $request, ContentItem $content): RedirectResponse
     {
+        // Check the existing record before trusting the submitted type.
+        // Otherwise a specialist admin could change the request's type and
+        // attempt to take over content owned by another category.
+        $this->authorizeContentType($request->user(), $content->type);
+
         $data = $this->validated($request);
+        // Also validate the destination category when a record is reclassified.
         $this->authorizeContentType($request->user(), $data['type']);
         $oldCover = $content->cover_image;
         if (! $request->filled('cover_image') && ! $request->hasFile('cover_image_file')) {
