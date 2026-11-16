@@ -25,6 +25,8 @@ jobs:
           cp .env.example .env
           php artisan key:generate
       - name: Verify admin provisioning command
-        run: php artisan list --raw | grep -qx 'kadestim:create-admin'
+        run: |
+          php artisan list --raw
+          php artisan help kadestim:create-admin
       - name: Run automated tests
         run: php artisan test
