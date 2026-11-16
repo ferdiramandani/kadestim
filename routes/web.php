@@ -19,6 +19,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::view('/', 'admin.dashboard')->name('dashboard');
-        Route::resource('/konten', ContentController::class)->parameters(['konten' => 'content'])->names('content');
+        Route::resource('/konten', ContentController::class)->except(['show'])->parameters(['konten' => 'content'])->names('content');
     });
 });
