@@ -57,6 +57,24 @@ class AdminLearningContentTest extends TestCase
         $this->assertSame('Kebersihan diri', $item->scenario_data['topic']);
     }
 
+    public function test_admin_can_create_non_learning_content_without_scenario_fields(): void
+    {
+        $this->actingAs($this->admin())->post(route('admin.content.store'), [
+            'title' => 'Edukasi Gizi Seimbang',
+            'type' => 'article',
+            'status' => 'draft',
+            'excerpt' => 'Materi pengenalan gizi seimbang.',
+            'body' => 'Konten edukasi.',
+        ])->assertRedirect(route('admin.content.index'));
+
+        $this->assertDatabaseHas('content_items', [
+            'title' => 'Edukasi Gizi Seimbang',
+            'type' => 'article',
+            'status' => 'draft',
+            'scenario_data' => null,
+        ]);
+    }
+
     public function test_learning_module_requires_exactly_one_recommended_choice(): void
     {
         $this->actingAs($this->admin())->from('/admin/konten/create')->post(route('admin.content.store'), [
