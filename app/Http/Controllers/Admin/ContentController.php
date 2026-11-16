@@ -88,17 +88,25 @@ class ContentController extends Controller
             'event_start_at' => ['nullable', 'date'],
             'event_location' => ['nullable', 'string', 'max:180'],
             'external_url' => ['nullable', 'url', 'max:2048'],
-            'scenario.intro' => ['nullable', 'string', 'max:1000'],
-            'scenario.situation' => ['nullable', 'string', 'max:2000'],
+            'scenario.intro' => ['required_if:type,learning', 'nullable', 'string', 'max:1000'],
+            'scenario.situation' => ['required_if:type,learning', 'nullable', 'string', 'max:2000'],
             'scenario.supporting_info' => ['nullable', 'array', 'max:8'],
             'scenario.supporting_info.*' => ['nullable', 'string', 'max:500'],
-            'scenario.question' => ['nullable', 'string', 'max:500'],
-            'scenario.choices' => ['nullable', 'array', 'max:6'],
-            'scenario.choices.*.label' => ['nullable', 'string', 'max:300'],
-            'scenario.choices.*.feedback' => ['nullable', 'string', 'max:1000'],
+            'scenario.question' => ['required_if:type,learning', 'nullable', 'string', 'max:500'],
+            'scenario.choices' => ['required_if:type,learning', 'array', 'min:2', 'max:6'],
+            'scenario.choices.*.label' => ['required', 'string', 'max:300'],
+            'scenario.choices.*.feedback' => ['required', 'string', 'max:1000'],
             'scenario.choices.*.is_recommended' => ['nullable', 'boolean'],
-            'scenario.summary' => ['nullable', 'string', 'max:1500'],
+            'scenario.summary' => ['required_if:type,learning', 'nullable', 'string', 'max:1500'],
         ]);
+
+        if ($request->input('type') === 'learning' && ! collect($request->input('scenario.choices', []))->contains(fn ($choice) => ! empty($choice['is_recommended']))) {
+            throw ValidationException::withMessages([
+                'scenario.choices' => 'Tandai satu pilihan sebagai tindakan yang direkomendasikan.',
+            ]);
+        }
+
+        return $validated;
     }
 
     private function normalizeScenario(array $scenario): array
