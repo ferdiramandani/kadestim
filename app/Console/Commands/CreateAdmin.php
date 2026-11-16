@@ -31,6 +31,7 @@ class CreateAdmin extends Command
             return self::FAILURE;
         }
 
+        $role = (string) $this->choice('Peran admin', ['admin', 'super_admin', 'admin_event', 'admin_education', 'admin_gallery', 'admin_learning'], 'admin');
         $password = (string) $this->secret('Kata sandi (minimal 12 karakter)');
         $confirmation = (string) $this->secret('Ulangi kata sandi');
 
@@ -44,7 +45,7 @@ class CreateAdmin extends Command
             'name' => $name,
             'email' => $email,
             'password' => Hash::make($password),
-            'role' => 'admin',
+            'role' => $role,
             'is_active' => true,
         ]);
 
