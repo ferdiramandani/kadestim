@@ -45,3 +45,18 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 
 ## Catatan tahap pengembangan
 Fondasi aplikasi, routing, login admin, pengelolaan konten dasar, dan halaman publik sudah disiapkan di repository. Aplikasi belum diuji di server karena memerlukan instalasi dependency, konfigurasi database, dan pengujian runtime pada lingkungan PHP/MySQL.
+
+## Editor media pembelajaran
+Admin dapat menyusun modul Jelajah Kasus melalui form visual tanpa menulis JSON:
+- Pembuka dan situasi kasus.
+- Informasi pendukung yang dapat ditambah/hapus.
+- Pertanyaan refleksi.
+- Dua sampai enam pilihan tindakan, masing-masing dengan penjelasan.
+- Tepat satu pilihan ditandai sebagai tindakan yang direkomendasikan.
+- Rangkuman pembelajaran.
+- Pratinjau interaktif sebelum konten disimpan.
+
+Dashboard admin menampilkan jumlah total konten, konten terbit, draft, review, jumlah per kategori, serta enam konten yang terakhir diperbarui.
+
+## Pengujian
+Jalankan `php artisan test` untuk menjalankan automated tests. Pengujian mencakup akses halaman publik, autentikasi admin, penyimpanan skenario pembelajaran, dan validasi pilihan yang direkomendasikan. Hasil pengujian tetap perlu dijalankan di lingkungan PHP/MySQL proyek sebelum deployment.
