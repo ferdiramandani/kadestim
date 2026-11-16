@@ -31,9 +31,12 @@ class ContentController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
+        $scenario = $data['scenario'] ?? [];
+        unset($data['scenario']);
+
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['author_id'] = $request->user()->id;
-        $data['scenario_data'] = ! empty($data['scenario_data']) ? json_decode($data['scenario_data'], true) : null;
+        $data['scenario_data'] = $data['type'] === 'learning' ? $this->normalizeScenario($scenario) : null;
         $data['published_at'] = $data['status'] === 'published' ? now() : null;
 
         ContentItem::create($data);
@@ -49,8 +52,11 @@ class ContentController extends Controller
     public function update(Request $request, ContentItem $content): RedirectResponse
     {
         $data = $this->validated($request);
+        $scenario = $data['scenario'] ?? [];
+        unset($data['scenario']);
+
         $data['slug'] = $this->uniqueSlug($data['title'], $content->id);
-        $data['scenario_data'] = ! empty($data['scenario_data']) ? json_decode($data['scenario_data'], true) : null;
+        $data['scenario_data'] = $data['type'] === 'learning' ? $this->normalizeScenario($scenario) : null;
 
         if ($data['status'] === 'published' && ! $content->published_at) {
             $data['published_at'] = now();
@@ -82,8 +88,37 @@ class ContentController extends Controller
             'event_start_at' => ['nullable', 'date'],
             'event_location' => ['nullable', 'string', 'max:180'],
             'external_url' => ['nullable', 'url', 'max:2048'],
-            'scenario_data' => ['nullable', 'json'],
+            'scenario.intro' => ['nullable', 'string', 'max:1000'],
+            'scenario.situation' => ['nullable', 'string', 'max:2000'],
+            'scenario.supporting_info' => ['nullable', 'array', 'max:8'],
+            'scenario.supporting_info.*' => ['nullable', 'string', 'max:500'],
+            'scenario.question' => ['nullable', 'string', 'max:500'],
+            'scenario.choices' => ['nullable', 'array', 'max:6'],
+            'scenario.choices.*.label' => ['nullable', 'string', 'max:300'],
+            'scenario.choices.*.feedback' => ['nullable', 'string', 'max:1000'],
+            'scenario.choices.*.is_recommended' => ['nullable', 'boolean'],
+            'scenario.summary' => ['nullable', 'string', 'max:1500'],
         ]);
+    }
+
+    private function normalizeScenario(array $scenario): array
+    {
+        $choices = collect($scenario['choices'] ?? [])
+            ->filter(fn ($choice) => filled($choice['label'] ?? null))
+            ->map(fn ($choice) => [
+                'label' => trim($choice['label']),
+                'feedback' => trim($choice['feedback'] ?? ''),
+                'is_recommended' => filter_var($choice['is_recommended'] ?? false, FILTER_VALIDATE_BOOLEAN),
+            ])->values()->all();
+
+        return [
+            'intro' => trim($scenario['intro'] ?? ''),
+            'situation' => trim($scenario['situation'] ?? ''),
+            'supporting_info' => collect($scenario['supporting_info'] ?? [])->filter(fn ($item) => filled($item))->map(fn ($item) => trim($item))->values()->all(),
+            'question' => trim($scenario['question'] ?? ''),
+            'choices' => $choices,
+            'summary' => trim($scenario['summary'] ?? ''),
+        ];
     }
 
     private function uniqueSlug(string $title, ?int $ignoreId = null): string
