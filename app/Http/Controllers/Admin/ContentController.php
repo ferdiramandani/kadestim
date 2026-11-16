@@ -32,6 +32,7 @@ class ContentController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
+        $this->storeUploadedCover($request, $data);
         $scenario = $data['scenario'] ?? [];
         unset($data['scenario']);
 
@@ -53,6 +54,11 @@ class ContentController extends Controller
     public function update(Request $request, ContentItem $content): RedirectResponse
     {
         $data = $this->validated($request);
+        $oldCover = $content->cover_image;
+        $this->storeUploadedCover($request, $data);
+        if ($request->hasFile('cover_image_file') && $oldCover && ! str_starts_with($oldCover, 'http')) {
+            Storage::disk('public')->delete($oldCover);
+        }
         $scenario = $data['scenario'] ?? [];
         unset($data['scenario']);
 
@@ -72,9 +78,23 @@ class ContentController extends Controller
 
     public function destroy(ContentItem $content): RedirectResponse
     {
+        if ($content->cover_image && ! str_starts_with($content->cover_image, 'http')) {
+            Storage::disk('public')->delete($content->cover_image);
+        }
+
         $content->delete();
 
         return redirect()->route('admin.content.index')->with('success', 'Konten berhasil dihapus.');
+    }
+
+
+    private function storeUploadedCover(Request $request, array &$data): void
+    {
+        if ($request->hasFile('cover_image_file')) {
+            $data['cover_image'] = $request->file('cover_image_file')->storePublicly('content-covers', 'public');
+        }
+
+        unset($data['cover_image_file']);
     }
 
     private function validated(Request $request): array
@@ -85,6 +105,7 @@ class ContentController extends Controller
             'excerpt' => ['nullable', 'string', 'max:500'],
             'body' => ['nullable', 'string'],
             'cover_image' => ['nullable', 'url', 'max:2048'],
+            'cover_image_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'status' => ['required', 'in:draft,review,published,archived'],
             'event_start_at' => ['nullable', 'date'],
             'event_location' => ['nullable', 'string', 'max:180'],
