@@ -21,7 +21,12 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt($credentials + ['is_active' => true, 'role' => 'admin'], $request->boolean('remember'))) {
+        if (Auth::attempt($credentials + ['is_active' => true], $request->boolean('remember'))) {
+            $allowedRoles = ['admin', 'super_admin', 'admin_event', 'admin_education', 'admin_gallery', 'admin_learning'];
+            if (! in_array(Auth::user()->role, $allowedRoles, true)) {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Akun ini tidak memiliki akses admin.'])->onlyInput('email');
+            }
             $request->session()->regenerate();
 
             return redirect()->intended(route('admin.dashboard'));
