@@ -16,6 +16,7 @@ class ContentController extends Controller
     public function index(Request $request): View
     {
         $items = ContentItem::query()
+            ->when(in_array($request->user()->role, ['admin_event', 'admin_education', 'admin_gallery', 'admin_learning'], true), fn ($q) => $q->where('type', ['admin_event'=>'event','admin_education'=>'article','admin_gallery'=>'gallery','admin_learning'=>'learning'][$request->user()->role]))
             ->when($request->filled('type'), fn ($q) => $q->where('type', $request->input('type')))
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->input('status')))
             ->latest()
@@ -49,8 +50,9 @@ class ContentController extends Controller
         return redirect()->route('admin.content.index')->with('success', 'Konten berhasil dibuat.');
     }
 
-    public function edit(ContentItem $content): View
+    public function edit(Request $request, ContentItem $content): View
     {
+        $this->authorizeContentType($request->user(), $content->type);
         return view('admin.content.form', ['item' => $content]);
     }
 
@@ -69,7 +71,7 @@ class ContentController extends Controller
         $scenario = $data['scenario'] ?? [];
         unset($data['scenario']);
 
-        $data['content_format'] = $data['type'] === 'article' ? ($data['content_format'] ?? 'text') : null;
+        $data['content_format'] = $data['type'] === 'article' ? ($data['content_format'] ?? 'text') : 'text';
         $data['slug'] = $this->uniqueSlug($data['title'], $content->id);
         $data['scenario_data'] = $data['type'] === 'learning' ? $this->normalizeScenario($scenario) : null;
 
