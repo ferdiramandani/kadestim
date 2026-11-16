@@ -52,8 +52,8 @@ GitHub Actions menjalankan `php artisan test` setiap ada push ke `main` atau pul
 3. Atur `.env` produksi: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` sesuai domain, dan kredensial database produksi.
 4. Jalankan `composer install --no-dev --optimize-autoloader`, `php artisan key:generate` hanya untuk instalasi baru, `php artisan migrate --force`, dan `php artisan config:cache`.
 5. Buat akun admin melalui `php artisan kadestim:create-admin` di terminal server.
-6. Aktifkan HTTPS, pastikan folder `storage` dan `bootstrap/cache` dapat ditulis, lalu cek `/up`, login admin, seluruh halaman publik, dan publikasi konten.
-7. Jangan unggah `.env`, kredensial, atau data pribadi ke GitHub.
+9. Aktifkan HTTPS, pastikan folder `storage` dan `bootstrap/cache` dapat ditulis, lalu cek `/up`, login admin, seluruh halaman publik, unggah gambar, dan publikasi konten.
+10. Jangan unggah `.env`, kredensial, atau data pribadi ke GitHub.
 
 ## Editor media pembelajaran
 Admin dapat menyusun modul Jelajah Kasus melalui form visual tanpa menulis JSON:
