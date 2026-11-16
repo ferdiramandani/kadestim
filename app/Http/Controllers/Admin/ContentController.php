@@ -33,6 +33,7 @@ class ContentController extends Controller
         $data = $this->validated($request);
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['author_id'] = $request->user()->id;
+        $data['scenario_data'] = ! empty($data['scenario_data']) ? json_decode($data['scenario_data'], true) : null;
         $data['published_at'] = $data['status'] === 'published' ? now() : null;
 
         ContentItem::create($data);
@@ -49,6 +50,7 @@ class ContentController extends Controller
     {
         $data = $this->validated($request);
         $data['slug'] = $this->uniqueSlug($data['title'], $content->id);
+        $data['scenario_data'] = ! empty($data['scenario_data']) ? json_decode($data['scenario_data'], true) : null;
 
         if ($data['status'] === 'published' && ! $content->published_at) {
             $data['published_at'] = now();
@@ -80,6 +82,7 @@ class ContentController extends Controller
             'event_start_at' => ['nullable', 'date'],
             'event_location' => ['nullable', 'string', 'max:180'],
             'external_url' => ['nullable', 'url', 'max:2048'],
+            'scenario_data' => ['nullable', 'json'],
         ]);
     }
 
