@@ -83,7 +83,7 @@ class AdminLearningContentTest extends TestCase
             'title' => 'Dokumentasi Kegiatan',
             'type' => 'gallery',
             'status' => 'draft',
-            'cover_image_file' => UploadedFile::fake()->image('cover.jpg'),
+            'cover_image_file' => UploadedFile::fake()->create('cover.jpg', 100, 'image/jpeg'),
         ])->assertRedirect(route('admin.content.index'));
 
         $item = ContentItem::where('title', 'Dokumentasi Kegiatan')->firstOrFail();
