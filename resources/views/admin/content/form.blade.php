@@ -9,14 +9,15 @@
     $supporting = $scenario['supporting_info'] ?? [''];
     $choices = $scenario['choices'] ?? [['label'=>'','feedback'=>'','is_recommended'=>false],['label'=>'','feedback'=>'','is_recommended'=>false]];
 @endphp
-<form class="editor-form" id="content-editor" method="post" action="{{ $item->exists ? route('admin.content.update',$item) : route('admin.content.store') }}">
+<form class="editor-form" id="content-editor" method="post" enctype="multipart/form-data" action="{{ $item->exists ? route('admin.content.update',$item) : route('admin.content.store') }}">
 @csrf @if($item->exists) @method('PUT') @endif
 <label>Judul konten<input name="title" value="{{ old('title',$item->title) }}" maxlength="180" required></label>
 <div class="form-two"><label>Kategori<select name="type" id="content-type" required>@foreach(['article'=>'Edukasi Kesehatan','event'=>'Event Duta','gallery'=>'Galeri','learning'=>'Media Pembelajaran'] as $key=>$label)<option value="{{ $key }}" @selected(old('type',$item->type)===$key)>{{ $label }}</option>@endforeach</select></label>
 <label>Status<select name="status" required>@foreach(['draft'=>'Draft','review'=>'Review','published'=>'Published','archived'=>'Archived'] as $key=>$label)<option value="{{ $key }}" @selected(old('status',$item->status ?: 'draft')===$key)>{{ $label }}</option>@endforeach</select></label></div>
 <label>Ringkasan<textarea name="excerpt" rows="3" maxlength="500">{{ old('excerpt',$item->excerpt) }}</textarea></label>
 <label>Isi konten<textarea name="body" rows="8">{{ old('body',$item->body) }}</textarea></label>
-<label>URL gambar sampul (opsional)<input type="url" name="cover_image" value="{{ old('cover_image',$item->cover_image) }}" placeholder="https://..."></label>
+<label>URL gambar sampul (opsional)<input type="url" name="cover_image" value="{{ old('cover_image',$item->cover_image && !str_starts_with($item->cover_image, 'http') ? '' : $item->cover_image) }}" placeholder="https://..."></label>
+<label>Atau unggah gambar dari perangkat (JPG, PNG, WEBP · maks. 4 MB)<input type="file" name="cover_image_file" accept="image/jpeg,image/png,image/webp">@if($item->cover_image && !str_starts_with($item->cover_image, 'http'))<small>Gambar tersimpan: {{ $item->cover_image }}</small>@endif</label>
 <div class="form-two"><label>Tanggal dan waktu event (opsional)<input type="datetime-local" name="event_start_at" value="{{ old('event_start_at',$item->event_start_at?->format('Y-m-d\TH:i')) }}"></label><label>Lokasi event (opsional)<input name="event_location" value="{{ old('event_location',$item->event_location) }}"></label></div>
 <label>Link pendaftaran / informasi (opsional)<input type="url" name="external_url" value="{{ old('external_url',$item->external_url) }}"></label>
 
