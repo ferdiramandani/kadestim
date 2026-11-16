@@ -21,6 +21,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::middleware('superadmin')->group(function () {
+            Route::get('/admins', [AdminUserController::class, 'index'])->name('users.index');
+            Route::post('/admins', [AdminUserController::class, 'store'])->name('users.store');
+            Route::patch('/admins/{user}', [AdminUserController::class, 'update'])->name('users.update');
+        });
         Route::resource('/konten', ContentController::class)->except(['show'])->parameters(['konten' => 'content'])->names('content');
     });
 });
