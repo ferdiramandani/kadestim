@@ -3,7 +3,7 @@
 @section('content')
 <section class="page-hero"><span class="eyebrow">KADESTIM · {{ strtoupper($type) }}</span><h1>{{ $item->title }}</h1><p>{{ $item->excerpt }}</p></section>
 <article class="article-body">
-@if($item->cover_image)<img class="article-cover" src="{{ $item->cover_image }}" alt="{{ $item->title }}">@endif
+@if($item->cover_image)<img class="article-cover" src="{{ str_starts_with($item->cover_image, 'http') ? $item->cover_image : asset('storage/'.$item->cover_image) }}" alt="{{ $item->title }}">@endif
 <div class="article-meta">Dipublikasikan {{ $item->published_at?->format('d F Y') }}</div>
 @if($type === 'learning' && $item->scenario_data)
 <div class="learning-tags"><span>{{ ['children'=>'Anak-anak','teens'=>'Remaja','adults'=>'Dewasa / keluarga','all'=>'Semua usia'][$item->scenario_data['audience'] ?? 'all'] }}</span><span>{{ $item->scenario_data['topic'] ?? 'Pembelajaran kesehatan' }}</span></div>
