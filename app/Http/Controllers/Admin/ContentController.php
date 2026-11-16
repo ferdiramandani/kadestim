@@ -89,6 +89,8 @@ class ContentController extends Controller
             'event_start_at' => ['nullable', 'date'],
             'event_location' => ['nullable', 'string', 'max:180'],
             'external_url' => ['nullable', 'url', 'max:2048'],
+            'scenario.audience' => ['required_if:type,learning', 'in:all,children,teens,adults'],
+            'scenario.topic' => ['required_if:type,learning', 'string', 'max:100'],
             'scenario.intro' => ['required_if:type,learning', 'nullable', 'string', 'max:1000'],
             'scenario.situation' => ['required_if:type,learning', 'nullable', 'string', 'max:2000'],
             'scenario.supporting_info' => ['nullable', 'array', 'max:8'],
@@ -126,6 +128,8 @@ class ContentController extends Controller
             ])->values()->all();
 
         return [
+            'audience' => $scenario['audience'] ?? 'all',
+            'topic' => trim($scenario['topic'] ?? ''),
             'intro' => trim($scenario['intro'] ?? ''),
             'situation' => trim($scenario['situation'] ?? ''),
             'supporting_info' => collect($scenario['supporting_info'] ?? [])
