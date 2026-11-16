@@ -22,9 +22,10 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 4. Buat database MySQL bernama `kadestim` (atau sesuaikan nama database di `.env`).
 5. Jalankan `php artisan key:generate`.
 6. Jalankan migrasi: `php artisan migrate`.
-7. Buat akun admin melalui terminal: `php artisan kadestim:create-admin`. Isi nama, email, dan kata sandi saat diminta. Kata sandi minimal 12 karakter.
-8. Jalankan server lokal: `php artisan serve`.
-9. Buka `http://127.0.0.1:8000`; halaman admin ada di `/admin/login`.
+7. Jalankan `php artisan storage:link`.
+8. Buat akun admin melalui terminal: `php artisan kadestim:create-admin`. Isi nama, email, dan kata sandi saat diminta. Kata sandi minimal 12 karakter.
+9. Jalankan server lokal: `php artisan serve`.
+10. Buka `http://127.0.0.1:8000`; halaman admin ada di `/admin/login`.
 
 ## Alur pengelolaan konten
 - Admin login ke `/admin/login`.
@@ -51,9 +52,10 @@ GitHub Actions menjalankan `php artisan test` setiap ada push ke `main` atau pul
 2. Arahkan document root domain ke folder `public` aplikasi Laravel.
 3. Atur `.env` produksi: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` sesuai domain, dan kredensial database produksi.
 4. Jalankan `composer install --no-dev --optimize-autoloader`, `php artisan key:generate` hanya untuk instalasi baru, `php artisan migrate --force`, dan `php artisan config:cache`.
-5. Buat akun admin melalui `php artisan kadestim:create-admin` di terminal server.
-9. Aktifkan HTTPS, pastikan folder `storage` dan `bootstrap/cache` dapat ditulis, lalu cek `/up`, login admin, seluruh halaman publik, unggah gambar, dan publikasi konten.
-10. Jangan unggah `.env`, kredensial, atau data pribadi ke GitHub.
+5. Jalankan `php artisan storage:link`.
+6. Buat akun admin melalui `php artisan kadestim:create-admin` di terminal server.
+7. Aktifkan HTTPS, pastikan folder `storage` dan `bootstrap/cache` dapat ditulis, lalu cek `/up`, login admin, seluruh halaman publik, unggah gambar, dan publikasi konten.
+8. Jangan unggah `.env`, kredensial, atau data pribadi ke GitHub.
 
 ## Editor media pembelajaran
 Admin dapat menyusun modul Jelajah Kasus melalui form visual tanpa menulis JSON:
