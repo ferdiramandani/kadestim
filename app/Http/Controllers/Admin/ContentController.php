@@ -33,11 +33,12 @@ class ContentController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
+        $this->authorizeContentType($request->user(), $data['type']);
         $this->storeUploadedCover($request, $data);
         $scenario = $data['scenario'] ?? [];
         unset($data['scenario']);
 
-        $data['content_format'] = $data['type'] === 'article' ? ($data['content_format'] ?? 'text') : null;
+        $data['content_format'] = $data['type'] === 'article' ? ($data['content_format'] ?? 'text') : 'text';
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['author_id'] = $request->user()->id;
         $data['scenario_data'] = $data['type'] === 'learning' ? $this->normalizeScenario($scenario) : null;
@@ -56,6 +57,7 @@ class ContentController extends Controller
     public function update(Request $request, ContentItem $content): RedirectResponse
     {
         $data = $this->validated($request);
+        $this->authorizeContentType($request->user(), $data['type']);
         $oldCover = $content->cover_image;
         if (! $request->filled('cover_image') && ! $request->hasFile('cover_image_file')) {
             $data['cover_image'] = $oldCover;
@@ -82,8 +84,9 @@ class ContentController extends Controller
         return redirect()->route('admin.content.index')->with('success', 'Konten berhasil diperbarui.');
     }
 
-    public function destroy(ContentItem $content): RedirectResponse
+    public function destroy(Request $request, ContentItem $content): RedirectResponse
     {
+        $this->authorizeContentType($request->user(), $content->type);
         if ($content->cover_image && ! str_starts_with($content->cover_image, 'http')) {
             Storage::disk('public')->delete($content->cover_image);
         }
@@ -93,6 +96,22 @@ class ContentController extends Controller
         return redirect()->route('admin.content.index')->with('success', 'Konten berhasil dihapus.');
     }
 
+
+    private function authorizeContentType($user, string $type): void
+    {
+        $allowed = [
+            'admin_event' => 'event',
+            'admin_education' => 'article',
+            'admin_gallery' => 'gallery',
+            'admin_learning' => 'learning',
+        ];
+
+        if (in_array($user->role, ['admin', 'super_admin'], true)) {
+            return;
+        }
+
+        abort_unless(($allowed[$user->role] ?? null) === $type, 403, 'Akun ini tidak memiliki izin untuk mengelola kategori konten tersebut.');
+    }
 
     private function storeUploadedCover(Request $request, array &$data): void
     {
