@@ -74,3 +74,11 @@ Dashboard admin menampilkan jumlah total konten, konten terbit, draft, review, j
 
 ## Pengujian
 Jalankan `php artisan test` untuk menjalankan automated tests. Pengujian mencakup akses halaman publik, autentikasi admin, penyimpanan skenario pembelajaran, dan validasi pilihan yang direkomendasikan. Hasil pengujian tetap perlu dijalankan di lingkungan PHP/MySQL proyek sebelum deployment.
+
+
+## Identitas visual dan musik
+- Logo KADESTIM berada di `public/images/kadestim-logo.png` dan digunakan pada header serta footer.
+- File lagu resmi Duta Kesehatan Jawa Timur perlu ditempatkan di `public/audio/lagu-duta-kesehatan-jatim.mp3`.
+- Pemutar lagu hanya dirender pada halaman Beranda, Event Duta, dan Galeri. Saat file lagu tersedia, halaman tersebut mencoba memutar otomatis dan menyediakan tombol putar/jeda serta bisukan.
+- Browser dapat membatasi autoplay bersuara sebelum interaksi pengunjung. Jika dibatasi, pengunjung dapat menekan tombol putar.
+- Ketika pengunjung berpindah ke halaman selain Beranda, Event Duta, atau Galeri, pemutar tidak ditampilkan dan musik dihentikan.
