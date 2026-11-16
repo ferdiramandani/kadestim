@@ -40,7 +40,7 @@
     <div class="public-content-grid">
         @foreach($latestArticles as $item)
         <a class="public-content-card" href="{{ route('content.show', ['type' => 'article', 'slug' => $item->slug]) }}">
-            @if($item->cover_image)<img src="{{ $item->cover_image }}" alt="" loading="lazy">@else<div class="content-placeholder">KADESTIM</div>@endif
+            @if($item->cover_image)<img src="{{ str_starts_with($item->cover_image, 'http') ? $item->cover_image : asset('storage/'.$item->cover_image) }}" alt="" loading="lazy">@else<div class="content-placeholder">KADESTIM</div>@endif
             <div class="public-content-copy"><span class="eyebrow">{{ $item->published_at?->format('d M Y') }}</span><h2>{{ $item->title }}</h2><p>{{ $item->excerpt }}</p><span class="feature-link">Baca selengkapnya ↗</span></div>
         </a>
         @endforeach
