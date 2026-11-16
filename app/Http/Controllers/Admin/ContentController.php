@@ -14,8 +14,8 @@ class ContentController extends Controller
     public function index(Request $request): View
     {
         $items = ContentItem::query()
-            ->when($request->filled('type'), fn ($q) => $q->where('type', $request->string('type')))
-            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
+            ->when($request->filled('type'), fn ($q) => $q->where('type', $request->input('type')))
+            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->input('status')))
             ->latest()
             ->paginate(12)
             ->withQueryString();
