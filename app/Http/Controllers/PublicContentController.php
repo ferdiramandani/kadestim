@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContentItem;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PublicContentController extends Controller
 {
-    public function index(\\Illuminate\\Http\\Request $request, string $type): View
+    public function index(Request $request, string $type): View
     {
         abort_unless(in_array($type, ['article', 'event', 'gallery', 'learning'], true), 404);
 
