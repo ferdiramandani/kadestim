@@ -7,7 +7,9 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 - **Event Duta** — agenda, kegiatan, dan informasi acara.
 - **Galeri** — dokumentasi kegiatan dan kampanye.
 - **Media Pembelajaran** — Jelajah Kasus Kesehatan Interaktif dengan pendekatan Scenario-Based Learning.
-- **Panel Admin** — login admin, CRUD konten, filter kategori/status, dan alur draft/review/published/archived.
+- **Panel Admin Multi-User** — Super Admin, Admin umum, Admin Event, Admin Edukasi, Admin Galeri, dan Admin Pembelajaran dengan hak akses kategori.
+- **Edukasi Teks & Video** — artikel teks atau video dengan filter jenis dan halaman detail.
+- **Ringkasan konten** — kartu edukasi dan event menggunakan ringkasan singkat serta tautan Selengkapnya.
 
 ## Teknologi
 - Laravel 12 / PHP 8.2+
@@ -23,7 +25,7 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 5. Jalankan `php artisan key:generate`.
 6. Jalankan migrasi: `php artisan migrate`.
 7. Jalankan `php artisan storage:link`.
-8. Buat akun admin melalui terminal: `php artisan kadestim:create-admin`. Isi nama, email, dan kata sandi saat diminta. Kata sandi minimal 12 karakter.
+8. Buat akun admin melalui terminal: `php artisan kadestim:create-admin`. Isi nama, email, pilih peran `super_admin` untuk akun pengelola utama (atau peran sesuai kebutuhan), dan kata sandi minimal 12 karakter. Super Admin dapat menambah serta mengatur akun admin lain melalui dashboard.
 9. Jalankan server lokal: `php artisan serve`.
 10. Buka `http://127.0.0.1:8000`; halaman admin ada di `/admin/login`.
 
@@ -34,10 +36,11 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 - Status **Draft** dan **Review** tidak tampil untuk publik.
 - Status **Published** tampil di halaman publik.
 - Status **Archived** disimpan di area admin dan tidak tampil untuk publik.
-- Untuk tipe **Media Pembelajaran**, admin menggunakan editor visual: kelompok sasaran, topik, pembuka, situasi, informasi pendukung, pertanyaan refleksi, pilihan tindakan, penjelasan, dan rangkuman. Pengunjung dapat memfilter modul berdasarkan kelompok sasaran dan topik, lalu menjelajahi kasus tanpa sistem skor.
+- Untuk tipe **Edukasi Kesehatan**, admin memilih format teks atau video. Untuk tipe **Media Pembelajaran**, admin menggunakan editor visual: kelompok sasaran, topik, pembuka, situasi, informasi pendukung, pertanyaan refleksi, pilihan tindakan, penjelasan, dan rangkuman. Pengunjung dapat memfilter modul berdasarkan kelompok sasaran dan topik, lalu menjelajahi kasus tanpa sistem skor.
 
 ## Keamanan
-- Tidak ada pendaftaran admin publik. Akun admin dibuat melalui perintah terminal.
+- Tidak ada pendaftaran admin publik. Akun pertama dibuat melalui terminal dengan peran `super_admin`; akun berikutnya dapat dibuat oleh Super Admin dari dashboard.
+- Peran khusus hanya dapat mengelola kategori yang menjadi tanggung jawabnya.
 - Akses dashboard dan CRUD dibatasi middleware autentikasi dan role admin.
 - Form login dibatasi percobaannya (rate limit).
 - Jangan pernah mengunggah file `.env`, password, token, atau data pribadi ke repository.
