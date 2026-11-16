@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="dashboard-stats">
-        <article class="stat-card stat-card-main"><span>Total konten</span><strong>{{ $counts['total'] }}</strong><small>Seluruh kategori</small></article>
+        <article class="stat-card stat-card-main"><span>Total konten</span><strong>{{ $counts['total'] }}</strong><small>Sesuai cakupan akses akun</small></article>
         <article class="stat-card"><span>Published</span><strong>{{ $counts['published'] }}</strong><small>Tampil untuk publik</small></article>
         <article class="stat-card"><span>Draft</span><strong>{{ $counts['draft'] }}</strong><small>Belum diterbitkan</small></article>
         <article class="stat-card"><span>Perlu review</span><strong>{{ $counts['review'] }}</strong><small>Menunggu pemeriksaan</small></article>
@@ -25,10 +25,12 @@
     <div class="admin-section-heading"><div><span class="eyebrow">KATEGORI KONTEN</span><h2>Kelola berdasarkan bagian</h2></div></div>
     <div class="admin-grid">
         @foreach ([['article','Edukasi Kesehatan','Artikel, informasi, dan materi kesehatan.'],['event','Event Duta','Agenda dan kegiatan Duta Kesehatan.'],['gallery','Galeri','Dokumentasi kegiatan dan kampanye.'],['learning','Media Pembelajaran','Jelajah kasus kesehatan interaktif.']] as [$type,$label,$description])
+            @if(in_array($type, $allowedTypes, true))
             <a class="admin-tile" href="{{ route('admin.content.index',['type'=>$type]) }}">
                 <span class="admin-tile-count">{{ $byType[$type] ?? 0 }} konten</span>
                 <h3>{{ $label }}</h3><p>{{ $description }}</p><span class="feature-link">Buka pengelolaan ↗</span>
             </a>
+            @endif
         @endforeach
     </div>
     <div class="recent-content">
