@@ -33,7 +33,7 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 - Status **Draft** dan **Review** tidak tampil untuk publik.
 - Status **Published** tampil di halaman publik.
 - Status **Archived** disimpan di area admin dan tidak tampil untuk publik.
-- Untuk tipe **Media Pembelajaran**, admin dapat mengisi data skenario dalam JSON: `intro`, `situation`, `supporting_info` (array), `question`, `choices` (array berisi `label`, `feedback`, `is_recommended`), dan `summary`. Pengunjung membaca situasi dan informasi pendukung, memilih tindakan, lalu melihat penjelasan dan rangkuman tanpa sistem skor.
+- Untuk tipe **Media Pembelajaran**, admin menggunakan editor visual: kelompok sasaran, topik, pembuka, situasi, informasi pendukung, pertanyaan refleksi, pilihan tindakan, penjelasan, dan rangkuman. Pengunjung dapat memfilter modul berdasarkan kelompok sasaran dan topik, lalu menjelajahi kasus tanpa sistem skor.
 
 ## Keamanan
 - Tidak ada pendaftaran admin publik. Akun admin dibuat melalui perintah terminal.
@@ -43,8 +43,17 @@ KADESTIM adalah platform digital untuk mengelola informasi kegiatan Duta Kesehat
 - Untuk produksi, atur `APP_ENV=production`, `APP_DEBUG=false`, HTTPS, dan kredensial database yang kuat.
 - Materi kesehatan perlu ditinjau tenaga/pihak yang kompeten sebelum diterbitkan. Konten KADESTIM bukan diagnosis atau pengganti konsultasi tenaga kesehatan.
 
-## Catatan tahap pengembangan
-Fondasi aplikasi, routing, login admin, pengelolaan konten dasar, dan halaman publik sudah disiapkan di repository. Aplikasi belum diuji di server karena memerlukan instalasi dependency, konfigurasi database, dan pengujian runtime pada lingkungan PHP/MySQL.
+## Pemeriksaan otomatis
+GitHub Actions menjalankan `php artisan test` setiap ada push ke `main` atau pull request. Status workflow dapat dilihat pada tab **Actions** repository. Tetap lakukan pemeriksaan manual pada lingkungan hosting sebelum mengumumkan situs aktif.
+
+## Persiapan publikasi
+1. Siapkan hosting yang mendukung PHP 8.2+, Composer, ekstensi Laravel, dan MySQL/MariaDB.
+2. Arahkan document root domain ke folder `public` aplikasi Laravel.
+3. Atur `.env` produksi: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` sesuai domain, dan kredensial database produksi.
+4. Jalankan `composer install --no-dev --optimize-autoloader`, `php artisan key:generate` hanya untuk instalasi baru, `php artisan migrate --force`, dan `php artisan config:cache`.
+5. Buat akun admin melalui `php artisan kadestim:create-admin` di terminal server.
+6. Aktifkan HTTPS, pastikan folder `storage` dan `bootstrap/cache` dapat ditulis, lalu cek `/up`, login admin, seluruh halaman publik, dan publikasi konten.
+7. Jangan unggah `.env`, kredensial, atau data pribadi ke GitHub.
 
 ## Editor media pembelajaran
 Admin dapat menyusun modul Jelajah Kasus melalui form visual tanpa menulis JSON:
