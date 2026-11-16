@@ -39,3 +39,12 @@
 .learning-tags{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0}
 .learning-tags span{padding:5px 9px;border-radius:20px;background:#e8f3fc;color:#2f6f9f;font-size:10px;font-weight:700}
 @media(max-width:600px){.learning-filter-wrap{padding-left:18px;padding-right:18px}.learning-filters{align-items:stretch}.learning-filters label{min-width:100%}.learning-filters .button{width:100%;justify-content:center}}
+
+
+/* Publication readiness: video and multi-admin screens */
+.video-embed{position:relative;width:100%;aspect-ratio:16/9;margin:1.5rem 0 2rem;overflow:hidden;border-radius:1.25rem;background:#e8f3fc}
+.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#article-format-field[hidden],#scenario-editor[hidden]{display:none!important}
+.admin-users-form{display:grid;gap:1rem}
+.table-actions select{max-width:10rem;min-width:7rem}
+@media(max-width:720px){.table-actions{flex-wrap:wrap}.table-actions select{max-width:100%;width:100%}.video-embed{border-radius:.8rem}}
