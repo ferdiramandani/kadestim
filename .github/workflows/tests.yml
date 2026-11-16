@@ -28,5 +28,6 @@ jobs:
         run: |
           php artisan list --raw
           php artisan help kadestim:create-admin
+          php artisan help kadestim:promote-super-admin
       - name: Run automated tests
         run: php artisan test
