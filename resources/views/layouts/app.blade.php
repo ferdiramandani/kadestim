@@ -10,8 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/kadestim.css') }}">
 </head>
-@php($musicEnabled = request()->routeIs('home', 'events', 'gallery') && file_exists(public_path('audio/lagu-duta-kesehatan-jatim.mp3')))
-<body data-music-enabled="{{ $musicEnabled ? 'true' : 'false' }}">
+<body>
     <header class="site-header">
         <a class="brand" href="{{ route('home') }}"><img class="brand-logo" src="{{ asset('images/kadestim-logo.png') }}" alt="Logo resmi KADESTIM"><span class="brand-name">KADESTIM<small>Kader Kesehatan Jawa Timur</small></span></a>
         <button class="menu-toggle" aria-label="Buka navigasi" aria-expanded="false">☰</button>
@@ -29,14 +28,15 @@
     <footer class="site-footer">
         <div><a class="brand brand-light" href="{{ route('home') }}"><img class="brand-logo" src="{{ asset('images/kadestim-logo.png') }}" alt="Logo resmi KADESTIM"><span class="brand-name">KADESTIM<small>Kader Kesehatan Jawa Timur</small></span></a><p>Ruang informasi, edukasi, dan pembelajaran kesehatan yang terbuka untuk masyarakat.</p></div>
         <div class="footer-note">© {{ date('Y') }} KADESTIM. Dikembangkan untuk edukasi kesehatan.</div>
+        @if(file_exists(public_path('audio/bakti-jawi-wetan.mp3')))
+        <div class="site-audio site-audio-footer">
+            <p><strong>Lagu Duta Kesehatan Jawa Timur</strong><br><small>Bakti Jawi Wetan</small></p>
+            <audio controls preload="none" src="{{ asset('audio/bakti-jawi-wetan.mp3') }}">
+                Browser Anda belum mendukung pemutar audio.
+            </audio>
+        </div>
+        @endif
     </footer>
-    @if($musicEnabled)
-    <div class="site-audio" aria-label="Pemutar Lagu Duta Kesehatan Jawa Timur">
-        <audio id="kadestim-theme" src="{{ asset('audio/lagu-duta-kesehatan-jatim.mp3') }}" autoplay loop preload="auto"></audio>
-        <button type="button" class="audio-toggle" data-audio-toggle aria-label="Putar atau jeda lagu">♫ <span>Memuat lagu...</span></button>
-        <button type="button" class="audio-mute" data-audio-mute aria-label="Bisukan atau aktifkan suara">Suara</button>
-    </div>
-    @endif
     <script src="{{ asset('js/kadestim.js') }}" defer></script>
 </body>
 </html>
